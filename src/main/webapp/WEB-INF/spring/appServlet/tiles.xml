@@ -28,5 +28,11 @@
 			value="/WEB-INF/views/ResetPassword.jsp" />
 	</definition>
 	
+	<definition name="DeleteExpense" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/DeleteExpense.jsp" />
+	</definition>
+	
+	
 
 </tiles-definitions>  

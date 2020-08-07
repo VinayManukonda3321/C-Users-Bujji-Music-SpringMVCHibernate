@@ -11,5 +11,7 @@ public interface FERService {
 	boolean resetPassword(int userId, String currentpassword, String newpassword);
 	
 	int login(String username, String password);
+	
+	boolean deleteExpense(int expenseId);
 
 }

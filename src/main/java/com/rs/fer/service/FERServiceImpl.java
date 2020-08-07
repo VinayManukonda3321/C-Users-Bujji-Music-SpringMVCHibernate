@@ -2,8 +2,10 @@ package com.rs.fer.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.hibernate.annotations.common.util.impl.Log_.logger;
 import org.springframework.stereotype.Service;
 
 import com.rs.fer.util.DBUtil;
@@ -82,6 +84,37 @@ public class FERServiceImpl implements FERService {
 	}
 
 	
-	
+	@Override
+	public boolean deleteExpense(int expenseId) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("deleteExpense:: expenseId:" + expenseId);
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection.prepareStatement("DELETE FROM expense WHERE id=?");
+
+			statement.setInt(1, expenseId);
+
+			int numOfRecsDel = statement.executeUpdate();
+
+			logger.info("deleteExpense:: numOfRecsIns:" + numOfRecsDel);
+
+			return numOfRecsDel > 0;
+
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return false;
+	}
+
 
 }

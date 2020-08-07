@@ -74,6 +74,23 @@ public class FERController {
 		return "Status";
 
 	}
+	@RequestMapping(value = "/deleteExpense", method = RequestMethod.GET)
+	public String deleteExpense() {
+		return "DeleteExpense"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/deleteExpense", method = RequestMethod.POST)
+	public String deleteExpense(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		int expenseId = Integer.parseInt(request.getParameter("ExpenseId"));
+
+		boolean isDel = ferService.deleteExpense(expenseId);
+
+		request.getSession().setAttribute("Status", isDel ? "deleted sucessfully" : "delete  failed");
+
+		return "Status";
+
+	}
 
 	
 	
