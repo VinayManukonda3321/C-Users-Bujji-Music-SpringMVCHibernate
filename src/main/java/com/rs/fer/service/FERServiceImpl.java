@@ -8,10 +8,13 @@ import java.sql.SQLException;
 import org.springframework.stereotype.Service;
 
 import com.rs.fer.model.Expense;
+import com.rs.fer.model.User;
 import com.rs.fer.util.DBUtil;
 
 @Service
 public class FERServiceImpl implements FERService {
+
+	final static Loader logger = Logger.getLogger(FERServiceImpl.class);
 
 	@Override
 	public int login(String username, String password) {
@@ -45,6 +48,47 @@ public class FERServiceImpl implements FERService {
 		}
 
 		return 0;
+	}
+
+	@Override
+	public boolean registration(User user) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("registration:: user:" + user);
+		logger.debug("registration:: password: " + user.getPassword());
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection.prepareStatement(
+					"INSERT INTO user (firstName,middleName,lastName,email,mobile,userName,password) VALUES(?,?,?,?,?,?,?);");
+			statement.setString(1, user.getFirstName());
+			statement.setString(2, user.getMiddleName());
+			statement.setString(3, user.getLastName());
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getMobile());
+			statement.setString(6, user.getUsername());
+			statement.setString(7, user.getPassword());
+
+			int numOfRecsIns = statement.executeUpdate();
+
+			logger.info("registration:: numOfRecsIns:" + numOfRecsIns);
+
+			return numOfRecsIns > 0;
+
+		}
+
+		catch (SQLException e) {
+
+			logger.error("registration:: SQLException:" + e.getMessage());
+
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return false;
 	}
 
 	@Override
@@ -86,7 +130,6 @@ public class FERServiceImpl implements FERService {
 		return false;
 	}
 
-
 	@Override
 	public boolean resetPassword(int Id, String currentpassword, String newpassword) {
 		Connection connection = null;
@@ -123,7 +166,6 @@ public class FERServiceImpl implements FERService {
 		return false;
 	}
 
-
 	@Override
 	public boolean deleteExpense(int expenseId) {
 		Connection connection = null;
@@ -155,6 +197,5 @@ public class FERServiceImpl implements FERService {
 
 		return false;
 	}
-
 
 }

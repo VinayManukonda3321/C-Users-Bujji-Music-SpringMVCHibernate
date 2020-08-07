@@ -29,7 +29,7 @@ public class FERController {
 	public void setferService(FERService ps) {
 		this.ferService = ps;
 	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 		return "Login"; // To invoke another path
@@ -53,7 +53,40 @@ public class FERController {
 			return "Login"; // To invoke another path
 		}
 	}
-	
+
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public String registration() {
+		return "Registration"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String registration(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		FERService ferService = new FERServiceImpl();
+		PrintWriter out = response.getWriter();
+
+		User user = new User();
+		user.setFirstName(request.getParameter("firstName"));
+		user.setMiddleName(request.getParameter("middleName"));
+		user.setLastName(request.getParameter("lastName"));
+		user.setEmail(request.getParameter("email"));
+		user.setMobile(request.getParameter("mobile"));
+		user.setUsername(request.getParameter("userName"));
+		user.setPassword(request.getParameter("password"));
+
+		boolean isRegister = ferService.registration(user);
+
+		if (isRegister) {
+			out.println("registration done sucessfully");
+			return "Login";
+
+		} else {
+			out.println("registration failed");
+			return "Registration";
+		}
+
+	}
+
 	@RequestMapping(value = "/addExpense", method = RequestMethod.GET)
 	public String addExpense() {
 		return "AddExpense"; // To invoke another path
@@ -82,7 +115,6 @@ public class FERController {
 		return "Status";
 
 	}
-	
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	public String resetPassword() {
@@ -104,6 +136,7 @@ public class FERController {
 		return "Status";
 
 	}
+
 	@RequestMapping(value = "/deleteExpense", method = RequestMethod.GET)
 	public String deleteExpense() {
 		return "DeleteExpense"; // To invoke another path
@@ -122,6 +155,4 @@ public class FERController {
 
 	}
 
-	
-	
 }

@@ -8,6 +8,8 @@ import com.rs.fer.model.User;
 
 public interface FERService {
 	
+	boolean registration(User user);
+	
 	boolean resetPassword(int userId, String currentpassword, String newpassword);
 	
 	int login(String username, String password);
