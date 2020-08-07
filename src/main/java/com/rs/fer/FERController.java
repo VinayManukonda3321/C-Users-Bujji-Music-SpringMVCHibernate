@@ -29,6 +29,30 @@ public class FERController {
 	public void setferService(FERService ps) {
 		this.ferService = ps;
 	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home() {
+		return "Login"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(HttpServletRequest request, HttpServletResponse response) {
+
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+
+		int Id = ferService.login(username, password);
+
+		if (Id > 0) {
+			HttpSession session = request.getSession();
+			session.setAttribute("Id", Id);
+			session.setAttribute("username", username);
+
+			return "Dashboard";
+		} else {
+			return "Login"; // To invoke another path
+		}
+	}
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	public String resetPassword() {

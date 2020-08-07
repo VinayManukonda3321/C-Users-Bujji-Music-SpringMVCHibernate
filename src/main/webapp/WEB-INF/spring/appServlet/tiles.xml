@@ -18,6 +18,11 @@
 			value="/WEB-INF/views/Dashboard.jsp" />
 	</definition>
 	
+	<definition name="Login" template="/WEB-INF/views/Login.jsp" />
+	<definition name="Status"
+		template="/WEB-INF/views/Status.jsp" />
+	
+	
 	<definition name="ResetPassword" extends="base.definition">
 		<put-attribute name="body"
 			value="/WEB-INF/views/ResetPassword.jsp" />

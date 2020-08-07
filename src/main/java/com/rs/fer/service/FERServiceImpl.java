@@ -10,6 +10,40 @@ import com.rs.fer.util.DBUtil;
 
 @Service
 public class FERServiceImpl implements FERService {
+	
+	@Override
+	public int login(String username, String password) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("login:: username:" + username);
+		logger.debug("login:: password: " + password);
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection.prepareStatement("select * from user where username=? and password=?");
+			statement.setString(1, username);
+			statement.setString(2, password);
+			ResultSet resultset = statement.executeQuery();
+			int id = 0;
+			while (resultset.next()) {
+
+				id = resultset.getInt(1);
+			}
+			return id;
+
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return 0;
+	}
 
 	@Override
 	public boolean resetPassword(int Id, String currentpassword, String newpassword) {
@@ -47,7 +81,7 @@ public class FERServiceImpl implements FERService {
 		return false;
 	}
 
-
+	
 	
 
 }
