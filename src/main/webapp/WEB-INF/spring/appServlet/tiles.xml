@@ -17,7 +17,11 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/Dashboard.jsp" />
 	</definition>
-
+	
+	<definition name="ResetPassword" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/ResetPassword.jsp" />
+	</definition>
 	
 
 </tiles-definitions>  

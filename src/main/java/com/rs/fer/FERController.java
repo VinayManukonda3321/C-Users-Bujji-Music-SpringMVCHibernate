@@ -30,7 +30,27 @@ public class FERController {
 		this.ferService = ps;
 	}
 
-	// To map the request path to find the appropriate controller method
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
+	public String resetPassword() {
+		return "ResetPassword"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+	public String resetPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+
+		FERService ferService = new FERServiceImpl();
+		String currentPassword = request.getParameter("currentpassword");
+		String newPassword = request.getParameter("newpassword");
+		int Id = Integer.parseInt(session.getAttribute("Id").toString());
+
+		boolean isReset = ferService.resetPassword(Id, currentPassword, newPassword);
+
+		request.getSession().setAttribute("Status", isReset ? "reset password sucessful" : "Password reset failed");
+		return "Status";
+
+	}
+
 	
 	
 }
