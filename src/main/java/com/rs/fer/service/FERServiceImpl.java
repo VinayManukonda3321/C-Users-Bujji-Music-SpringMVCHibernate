@@ -5,14 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.hibernate.annotations.common.util.impl.Log_.logger;
 import org.springframework.stereotype.Service;
 
+import com.rs.fer.model.Expense;
 import com.rs.fer.util.DBUtil;
 
 @Service
 public class FERServiceImpl implements FERService {
-	
+
 	@Override
 	public int login(String username, String password) {
 		Connection connection = null;
@@ -46,6 +46,46 @@ public class FERServiceImpl implements FERService {
 
 		return 0;
 	}
+
+	@Override
+	public boolean addExpense(Expense expense) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("addExpense:: expense:" + expense);
+
+		logger.debug("addExpense:: date: " + expense.getDate());
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection.prepareStatement(
+					"INSERT INTO expense (type,price,numberofitems,total,date,bywhome,userid) VALUES(?,?,?,?,?,?,?)");
+			statement.setString(1, expense.getType());
+			statement.setFloat(2, expense.getPrice());
+			statement.setInt(3, expense.getNumberofitems());
+			statement.setInt(4, expense.getTotal());
+			statement.setString(5, expense.getDate());
+			statement.setString(6, expense.getBywhome());
+			statement.setInt(7, expense.getUserid());
+
+			int numOfRecsAdd = statement.executeUpdate();
+
+			logger.info("addExpense:: numOfRecsIns:" + numOfRecsAdd);
+
+			return numOfRecsAdd > 0;
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return false;
+	}
+
 
 	@Override
 	public boolean resetPassword(int Id, String currentpassword, String newpassword) {
@@ -83,7 +123,7 @@ public class FERServiceImpl implements FERService {
 		return false;
 	}
 
-	
+
 	@Override
 	public boolean deleteExpense(int expenseId) {
 		Connection connection = null;

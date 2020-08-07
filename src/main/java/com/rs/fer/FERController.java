@@ -53,6 +53,36 @@ public class FERController {
 			return "Login"; // To invoke another path
 		}
 	}
+	
+	@RequestMapping(value = "/addExpense", method = RequestMethod.GET)
+	public String addExpense() {
+		return "AddExpense"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/addExpense", method = RequestMethod.POST)
+	public String addExpense(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		HttpSession session = request.getSession();
+
+		Expense expense = new Expense();
+		PrintWriter out = response.getWriter();
+
+		expense.setType(request.getParameter("expensetype"));
+		expense.setPrice(Float.parseFloat(request.getParameter("price")));
+		expense.setNumberofitems(Integer.parseInt(request.getParameter("noofitems")));
+		expense.setDate(request.getParameter("date"));
+		expense.setBywhome(request.getParameter("bywhome"));
+		expense.setTotal(Integer.parseInt(request.getParameter("total")));
+
+		expense.setUserid(Integer.parseInt(session.getAttribute("Id").toString()));
+
+		boolean isAdded = ferService.addExpense(expense);
+
+		request.getSession().setAttribute("Status", isAdded ? "expenses added sucessfully" : "expenses not added");
+		return "Status";
+
+	}
+	
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	public String resetPassword() {

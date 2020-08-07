@@ -12,27 +12,32 @@
 		<put-attribute name="footer"
 			value="/WEB-INF/views/Layout/Footer.html" />
 	</definition>
+
 	<definition name="Dashboard" extends="base.definition">
 		<put-attribute name="title" value="FER-Dashboard" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/Dashboard.jsp" />
 	</definition>
-	
+
 	<definition name="Login" template="/WEB-INF/views/Login.jsp" />
 	<definition name="Status"
 		template="/WEB-INF/views/Status.jsp" />
-	
-	
+
+	<definition name="AddExpense" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/AddExpense.jsp" />
+	</definition>
+
+
 	<definition name="ResetPassword" extends="base.definition">
 		<put-attribute name="body"
 			value="/WEB-INF/views/ResetPassword.jsp" />
 	</definition>
-	
+
 	<definition name="DeleteExpense" extends="base.definition">
 		<put-attribute name="body"
 			value="/WEB-INF/views/DeleteExpense.jsp" />
 	</definition>
-	
-	
+
 
 </tiles-definitions>  
