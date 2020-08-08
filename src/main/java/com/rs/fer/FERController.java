@@ -189,5 +189,64 @@ public class FERController {
 		return "Status";
 
 	}
+	
+	@RequestMapping(value = "/expenseReport", method = RequestMethod.GET)
+	public String expenseReport() {
+		return "ExpenseReport"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/expenseReportPost", method = {RequestMethod.POST,RequestMethod.GET})
+	public List<Expense> expenseReport(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
+
+		String expenseType = request.getParameter("type");
+		String fromDate = request.getParameter("fromDate");
+		String toDate = request.getParameter("toDate");
+		int Id = Integer.parseInt(session.getAttribute("Id").toString());
+
+		List<Expense> expenseReport = ferService.expenseReport(Id, expenseType, fromDate, toDate);
+		Iterator<Expense> iterator = expenseReport.iterator();
+		Expense expense = null;
+		out.println("<tr>");
+		out.println("<td colspan='6' align='center'>ReportExpense</td>");
+		out.println("</tr>");
+
+		out.println("<tr>");
+		out.println("<td>type</td>");
+		out.println("<td>date</td>");
+		out.println("<td>price</td>");
+		out.println("<td>numberofItems</td>");
+		out.println("<td>total</td>");
+		out.println("<td>bywhome</td>");
+		out.println("</tr>");
+
+		while (iterator.hasNext()) {
+
+			expense = iterator.next();
+
+			int id = expense.getId();
+			String type = expense.getType();
+			float price = expense.getPrice();
+			int numberofitems = expense.getNumberofitems();
+			float total = expense.getTotal();
+			String date = expense.getDate();
+			String bywhome = expense.getBywhome();
+			int userid = expense.getUserid();
+
+			out.println("<tr>");
+			out.println("<td>" + type + "</td>");
+			out.println("<td>" + price + "</td>");
+			out.println("<td>" + numberofitems + "</td>");
+			out.println("<td>" + total + "</td>");
+			out.println("<td>" + date + "</td>");
+			out.println("<td>" + bywhome + "</td>");
+
+			out.println("</tr>");
+
+		}
+		return expenseReport;
+	}
+
 
 }

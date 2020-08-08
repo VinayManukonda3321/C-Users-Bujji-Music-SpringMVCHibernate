@@ -21,5 +21,9 @@ public interface FERService {
 	User getuser(int id);
 	
 	boolean updateUser(User user);
+	
+	List<Expense> expenseReport(int userId, String type, String fromDate, String toDate);
+	
+	List<Expense> getExpenses(int userid);
 
 }

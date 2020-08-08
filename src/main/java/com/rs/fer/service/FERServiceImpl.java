@@ -293,5 +293,99 @@ public class FERServiceImpl implements FERService {
 
 		return false;
 	}
+	
+	@Override
+	public List<Expense> getExpenses(int userid) {
+		List<Expense> expenses = new ArrayList<Expense>();
+		Expense expense = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("getExpenses:: userid:" + userid);
+
+		try {
+			connection = DBUtil.getConnection();
+
+			statement = connection.prepareStatement("SELECT * FROM expense where userid=?");
+			statement.setInt(1, userid);
+			ResultSet resultset = statement.executeQuery();
+
+			while (resultset.next()) {
+				expense = new Expense();
+
+				expense.setId(resultset.getInt("id"));
+				expense.setType(resultset.getString("type"));
+				expense.setPrice(resultset.getFloat("price"));
+				expense.setNumberofitems(resultset.getInt("numberofitems"));
+				expense.setTotal(resultset.getInt("total"));
+				expense.setDate(resultset.getString("date"));
+				expense.setUserid(resultset.getInt("userid"));
+
+				expenses.add(expense);
+			}
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return expenses;
+	}
+
+	@Override
+	public List<Expense> expenseReport(int userId, String type, String fromDate, String toDate) {
+		List<Expense> expenses = new ArrayList<Expense>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		Expense expense = null;
+
+		logger.info("expenseReport:: userId:" + userId);
+		logger.info("expenseReport:: type:" + type);
+		logger.info("expenseReport:: fromDate:" + fromDate);
+		logger.info("expenseReport:: toDate:" + toDate);
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection
+					.prepareStatement("SELECT * FROM expense WHERE userid=? and type=? and date between ? and ?");
+			statement.setInt(1, userId);
+			statement.setString(2, type);
+			statement.setString(3, fromDate);
+			statement.setString(4, toDate);
+
+			ResultSet resultset = statement.executeQuery();
+
+			while (resultset.next()) {
+
+				expense = new Expense();
+
+				expense = new Expense();
+				expense.setId(resultset.getInt("id"));
+				expense.setType(resultset.getString("type"));
+				expense.setPrice(resultset.getFloat("price"));
+				expense.setNumberofitems(resultset.getInt("numberofitems"));
+				expense.setTotal(resultset.getInt("total"));
+				expense.setDate(resultset.getString("date"));
+				expense.setUserid(resultset.getInt("userid"));
+				expense.setBywhome(resultset.getString("bywhome"));
+
+				expenses.add(expense);
+
+			}
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+
+			DBUtil.closeConnection(connection);
+		}
+
+		return expenses;
+	}
 
 }

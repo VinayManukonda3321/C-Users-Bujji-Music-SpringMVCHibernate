@@ -62,6 +62,11 @@
 			value="/WEB-INF/views/ReviewInfo.jsp" />
 	</definition>
 
+	<definition name="ExpenseReport" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/ExpenseReport.jsp" />
+	</definition>
+	
 
 
 </tiles-definitions>  
