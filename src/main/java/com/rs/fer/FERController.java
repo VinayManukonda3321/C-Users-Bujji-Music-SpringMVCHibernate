@@ -154,5 +154,40 @@ public class FERController {
 		return "Status";
 
 	}
+	@RequestMapping(value = "/nameInfo", method = RequestMethod.GET)
+	public String nameInfo() {
+		return "NameInfo"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/contactInfo", method = RequestMethod.POST)
+	public String contactInfo() {
+		return "ContactInfo"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/addressInfo", method = RequestMethod.POST)
+	public String addressInfo() {
+		return "AddressInfo"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/reviewInfo", method = RequestMethod.POST)
+	public String reviewInfo() {
+		return "ReviewInfo"; // To invoke another path
+	}
+
+	@RequestMapping(value = "/updatePersonalInfo", method = RequestMethod.POST)
+	public String updatePersonalInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		HttpSession session = request.getSession();
+
+		User user = (User) session.getAttribute("user");
+		session.setAttribute("user", user);
+
+		boolean isUpdate = ferService.registration(user);
+
+		request.getSession().setAttribute("Status", isUpdate ? "updated sucessfully" : "update failed");
+
+		return "Status";
+
+	}
 
 }

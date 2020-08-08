@@ -42,5 +42,26 @@
 			value="/WEB-INF/views/DeleteExpense.jsp" />
 	</definition>
 
+<definition name="NameInfo" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/NameInfo.jsp" />
+	</definition>
+
+	<definition name="ContactInfo" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/ContactInfo.jsp" />
+	</definition>
+
+	<definition name="AddressInfo" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/AddressInfo.jsp" />
+	</definition>
+
+	<definition name="ReviewInfo" extends="base.definition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/ReviewInfo.jsp" />
+	</definition>
+
+
 
 </tiles-definitions>  

@@ -18,4 +18,8 @@ public interface FERService {
 	
 	boolean deleteExpense(int expenseId);
 
+	User getuser(int id);
+	
+	boolean updateUser(User user);
+
 }

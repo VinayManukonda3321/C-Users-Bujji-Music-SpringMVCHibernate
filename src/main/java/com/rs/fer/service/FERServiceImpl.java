@@ -198,4 +198,100 @@ public class FERServiceImpl implements FERService {
 		return false;
 	}
 
+	@Override
+	public User getuser(int id) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		User user = new User();
+		Address address = new Address();
+
+		logger.info("getuser:: id:" + id);
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			statement = connection
+					.prepareStatement("select u.*,a.* from user u left join address a on u.id=a.userid where u.id=?");
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				user.setId(resultSet.getInt("id"));
+				user.setFirstName(resultSet.getString("firstname"));
+				user.setMiddleName(resultSet.getString("middlename"));
+				user.setLastName(resultSet.getString("lastname"));
+				user.setEmail(resultSet.getString("email"));
+				user.setMobile(resultSet.getString("mobile"));
+				user.setUserName(resultSet.getString("username"));
+				user.setPassword(resultSet.getString("password"));
+
+				address.setId(resultSet.getInt("id"));
+				address.setLineOne(resultSet.getString("lineone"));
+				address.setLineTwo(resultSet.getString("linetwo"));
+				address.setCity(resultSet.getString("city"));
+				address.setCountry(resultSet.getString("country"));
+				address.setState(resultSet.getString("state"));
+				address.setPostal(resultSet.getString("postal"));
+				user.setAddress(address);
+			}
+		} catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+
+			DBUtil.closeConnection(connection);
+		}
+
+		return user;
+	}
+
+	@Override
+	public boolean updateUser(User user) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		logger.info("updateUser:: user:" + user);
+
+		logger.debug("updateUser:: password: " + user.getPassword());
+
+		try {
+
+			connection = DBUtil.getConnection();
+
+			connection.setAutoCommit(false);
+
+			statement = connection.prepareStatement(
+					"UPDATE USER SET firstname=?,middlename=?,lastname=?,email=?,mobile=? WHERE id=?");
+			statement.setString(1, user.getFirstName());
+			statement.setString(2, user.getMiddleName());
+			statement.setString(3, user.getLastName());
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getMobile());
+
+			int userUpdate = statement.executeUpdate();
+
+			statement = connection.prepareStatement(
+					"insert int adress(lineone,linetwo,city,state,country,postal) values(?,?,?,?,?,?)");
+			statement.setString(6, user.getAddress().getLineOne());
+			statement.setString(7, user.getAddress().getLineTwo());
+			statement.setString(8, user.getAddress().getCity());
+			statement.setString(9, user.getAddress().getState());
+			statement.setString(10, user.getAddress().getPostal());
+			statement.setString(11, user.getAddress().getCountry());
+
+			if (userUpdate > 0) {
+				return true;
+			}
+
+		}
+
+		catch (SQLException e) {
+			logger.error("registration:: SQLException:" + e.getMessage());
+		} finally {
+			DBUtil.closeConnection(connection);
+		}
+
+		return false;
+	}
+
 }
